@@ -1,0 +1,75 @@
+A switch statement is a shorter way to write a sequence of if - else statements. It runs the first case
+whose value is equal to the condition expression.
+
+Go's switch is like the one in C, C++, Java, JavaScript, and PHP, except that Go only runs the selected case
+, not all the cases that follow. In effect, the break statement that is needed at the end of each case 
+in those languages is provided automatically in Go. Another important difference is that Go's switch cases
+need not be constants, and the values involved need not be integers.
+
+
+
+packages are used for a single concept
+
+
+source code -> tokens -> abstract syntax tree
+
+source code to tokens is done by the lexxer
+
+In Go, the parentheses appearing before the function name in a function declaration define the receiver of a method. This syntax is Go's way of associating a function with a specific type, effectively making it a method of that type.
+type MyStruct struct {
+    value int
+}
+
+// This is a method with a value receiver
+func (m MyStruct) GetValue() int {
+    return m.value
+}
+
+// This is a method with a pointer receiver
+func (m *MyStruct) SetValue(newValue int) {
+    m.value = newValue
+}
+
+
+a map is a DS with key-value pairs 
+var myMap map[string]int // Declares a map with string keys and int values
+
+
+if tok, ok := keywords[ident]; ok {
+return tok
+}
+return IDENT
+The Go language snippet if tok, ok := keywords[ident]; ok { return tok } return IDENT is a common pattern used in lexers 
+or parsers, particularly when identifying keywords in a programming language.
+Here's a breakdown of its functionality:
+keywords[ident]:
+This attempts to access a value from a map named keywords using the ident variable as the key. The keywords map likely stores a mapping from string representations of keywords (e.g., "func", "if", "for") to their corresponding token types or representations within the language's token system.
+tok, ok := ...:
+This is Go's "comma-ok idiom" for map lookups.
+tok will be assigned the value associated with ident in the keywords map if ident exists as a key.
+ok will be a boolean value indicating whether the key ident was found in the keywords map (true if found, false otherwise).
+if ok { return tok }:
+This conditional statement checks the value of ok. If ok is true (meaning ident was found in the keywords map),
+the function immediately returns tok, which represents the identified keyword's token type.
+return IDENT:
+If the if ok condition evaluates to false (meaning ident was not found in the keywords map), the function 
+returns IDENT. This IDENT likely represents a generic "identifier" token type, indicating that the input ident is not a reserved
+keyword but rather a user-defined identifier (like a variable name).
+
+Exported (Public) Identifiers: If an identifier begins with a capital letter, it is "exported." This means it is visible and accessible from other packages that import the package 
+where the identifier is defined. This is Go's mechanism for controlling visibility, replacing keywords like public or private found in other languages.
+
+
+the REPL reads input, sends it to the interpreter for evaluation, prints the result/output of the interpreter and starts again. Read, Eval, Print, Loop.
+
+
+the parser is a software component which takes inputs such as tokens and places them in a data structure such as a tree or other data structure, allowing these tokens to have structural representation 
+if you think about it a json parser and a parser for a programming langiuage is the same thing 
+
+
+
+
+
+
+
+
