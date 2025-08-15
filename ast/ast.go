@@ -66,7 +66,7 @@ type LetStatement struct{
 
 	Token token.Token
 	Name *Identifier
-	Value Expression
+	Value *Identifier
 
 }
 
@@ -158,11 +158,11 @@ func (ls *LetStatement) TokenLiteral() string {return ls.Token.Literal}
 
 
 
-func (i *Identifier) expressionMode()		{}
+func (i *Identifier) expressionNode()		{}
 func (i *Identifier) TokenLiteral()		string {return i.Token.Literal }
 func (i *Identifier) String() string{return i.Value }
 
-func (es *ExpressionStatement) statementMode()		{}
+func (es *ExpressionStatement) statementNode()		{}
 func (es *ExpressionStatement) TokenLiteral()		string {return es.Token.Literal }
 
 
