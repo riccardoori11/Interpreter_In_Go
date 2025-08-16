@@ -1,10 +1,10 @@
 package parser
 
 import (
+	"fmt"
 	"interpreter_go/token/ast"
 	"interpreter_go/token/lexer"
 	"testing"
-
 )
 func testLetStatement(t *testing.T, s ast.Statement, name string)bool{
 
@@ -187,7 +187,7 @@ func TestIdentifierExpression(t *testing.T){
 	
 	if ident.TokenLiteral() != "foobar"{
 
-		t.Errorf("ident.TokenLiteral is not foobar, we got %s", ident.TokenLiteral())
+		t.Errorf("ident.TokenLiteral is not %s, we got %s","foobar", ident.TokenLiteral())
 	}
 
 
@@ -231,12 +231,95 @@ func TestIntegerLiteralExpression(t *testing.T){
 	
 	if literal.Token.Literal != "5"{
 
-		t.Errorf("literal.Token.Literal got %s", literal.Token.Literal)
+		t.Errorf("literal.Token.Literal expected %s instead we got %s", "5", literal.Token.Literal)
 	}
 	
 
 }
 
+func testIntegerLiteral(t *testing.T, il ast.Expression, value int64)bool{
+
+	integ, ok := il.(*ast.IntegerLiteral)	
+	
+	if !ok{
+
+		t.Errorf("Integ is not of type ast.IntegerLiteral. Instead got %s", il)
+		return false
+	}
+	
+	if integ.Value != value{
+
+		t.Errorf("The value is wrong. Expected %d and got %d", value,integ.Value)
+		return false
+	}
+	
+	if integ.TokenLiteral() != fmt.Sprintf("%d", value){
+
+		t.Errorf("Expected %d instead we got %s", value, integ.TokenLiteral())
+		return false
+	}
+	return true
+
+}
+
+
+func TestParsingPrefix(t *testing.T){
+
+	
+	prefixTests := []struct{
+		input 	string
+		operator 	string
+		integerValue int64
+
+	}{
+		{"/5", "/", 5},
+		{"-15", "-", 15},
+
+	}
+	for _,tt := range prefixTests{
+
+		l := lexer.New(tt.input)
+		p := New(l)
+		
+		program := p.ParserProgram()
+		
+		checkParserErrors(t,p)
+		
+		if len(program.Statements) != 1{
+
+			t.Fatalf("Expected 1 statement. Instead we got %d", len(program.Statements))	
+		}
+
+		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		if !ok{
+				
+			t.Fatalf("Expeced a *ast.ExpressionStatemenet instead got %T", program.Statements[0])
+
+		}
+		
+		exp,ok := stmt.Expression.(*ast.PrefixExpression)
+		
+		if !ok{
+			
+			t.Fatalf("Error not a PrefixExpression. Got %T", stmt.Expression)
+
+		}
+		
+		if exp.Operator != tt.operator{
+
+			t.Fatalf("exp.Operator is not %s, instead we got %s", tt.operator, exp.Operator)
+		}
+		
+		if !testIntegerLiteral(t, exp.Right, tt.integerValue){
+			
+			return
+
+		}
+		
+
+	}
+
+}
 
 
 

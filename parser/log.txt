@@ -1,1 +1,2 @@
-FAIL	interpreter_go/token/parser [setup failed]
+PASS
+ok  	interpreter_go/token/parser	0.003s
