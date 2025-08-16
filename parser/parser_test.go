@@ -321,15 +321,54 @@ func TestParsingPrefix(t *testing.T){
 
 }
 
+func TestInfixParseExpression(t *testing.T){
+
+	
+	infix_tests := []struct{
+
+		input string
+		left_value int64
+		operator string
+		right_value int64
+
+
+	}{
+		{"5 + 5", 5, "+",5 },
+{"5 - 5", 5, "-",5 },
+{"5 nOT= 5", 5, "nOT=",5 },
+{"5 / 5", 5, "/",5 },
+{"5 > 5", 5, ">",5 },
+{"5 < 5", 5, "<",5 },
+}
+
+for _,tt := range infix_tests{
+
+	l := lexer.New(tt.input)
+	p := New(l)
+	
+	program := p.ParserProgram()
+	checkParserErrors(t,p)
+	
+	if len(program.Statements) != 1{
+
+		t.Fatalf("Expected 1 statement instead we got %d", len(program.Statements))
+	}
+	
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	
+	if !ok{
+		
+		t.Fatalf("stmt is not a *ast.ExpressionStatement. Instead we got %T", program.Statements[0])
+	}
+	
+	exp, ok := stmt.Expression.(*ast.InfixExpression)
+
+}
 
 
 
 
-
-
-
-
-
+}
 
 
 
