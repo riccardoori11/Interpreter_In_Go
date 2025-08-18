@@ -362,6 +362,27 @@ for _,tt := range infix_tests{
 	}
 	
 	exp, ok := stmt.Expression.(*ast.InfixExpression)
+	
+	if !ok{
+
+		t.Fatalf("exp is not an ast.Infix.Expression. Instead we got %T", stmt.Expression)
+
+	}
+	
+	if !testIntegerLiteral(t,exp.Left, tt.left_value){
+
+		return
+	}
+	
+	if exp.Operator != tt.operator{
+
+		t.Fatalf("exp.Operator is not %s got %s ", tt.operator,exp.Operator)
+	}
+	
+	if !testIntegerLiteral(t, exp.Right, tt.right_value){
+		
+		return
+	}
 
 }
 
