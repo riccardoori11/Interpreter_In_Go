@@ -40,6 +40,19 @@ const (
 
 )
 
+var precedence  = map[token.TokenType]int{
+
+	token.ASSIGN: EQUALS,
+token.NEQ: EQUALS,
+token.LTHAN: LESSGREATER	,
+	token.GTHAN: LESSGREATER,
+token.PLUS: SUM,
+token.MINUS: SUM,
+token.SLASH: PRODUCT,
+token.ASTERIK: PRODUCT,
+
+} 
+
 
 
 
@@ -77,6 +90,17 @@ func New(l *lexer.Lexer) *Parser{
 			l : l,
 			errors: []string{},
 	}
+		
+		p.infixParseFns = make(map[token.TokenType]infixParseFn)
+
+		p.registerInfix(token.PLUS, p.parseInfixExpression)
+p.registerInfix(token.MINUS, p.parseInfixExpression)
+p.registerInfix(token.SLASH, p.parseInfixExpression)
+p.registerInfix(token.ASTERIK, p.parseInfixExpression)
+p.registerInfix(token.ASSIGN, p.parseInfixExpression)
+
+
+
 		p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 		p.registerPrefix(token.SLASH, p.parsePrefixExpression)	
 		p.registerPrefix(token.MINUS, p.parsePrefixExpression)
@@ -314,9 +338,43 @@ func (p *Parser)parseExpression(precedence int) ast.Expression{
 
 }
 
+func (p *Parser)peekPrecedence()int{
+	
+	if p,ok := precedence[p.peekToken.Type]; ok{
+		return p
+	}
+	
+	return LOWEST
 
 
+}
 
+func (p *Parser) curPrecedence()int{
+	
+	if p,ok := precedence[p.currToken.Type]; ok{
+		return p
+	}
+	
+	return LOWEST
+}
+
+func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression{
+
+	expression := ast.InfixExpression{
+
+		Token: 	p.currToken,
+		Operator: p.currToken.Literal,
+		Left: left,
+
+	}
+	
+	precedence := p.curPrecedence()
+	p.nextToken()
+	expression.Right = p.parseExpression(precedence)
+	
+	return expression
+
+}
 
 
 

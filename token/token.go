@@ -55,6 +55,8 @@ const(
 	//bool
 	TRUE = "TRUE" 
 	FALSE = "FALSE"
+	
+	ASTERIK = "*"
 
 )
 
