@@ -87,7 +87,7 @@ type PrefixExpression struct{
 
 type InfixExpression struct{
 
-	Token token.Token
+	Token token.Token    // The Operator Token eg: +
 	Left Expression
 	Operator string
 	Right Expression
