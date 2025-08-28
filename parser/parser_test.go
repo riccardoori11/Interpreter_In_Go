@@ -6,6 +6,15 @@ import (
 	"interpreter_go/token/lexer"
 	"testing"
 )
+
+
+
+
+
+
+
+
+
 func testLetStatement(t *testing.T, s ast.Statement, name string)bool{
 
 
@@ -392,6 +401,47 @@ for _,tt := range infix_tests{
 }
 
 
+func TestOperatorPrecedence(t *testing.T){
 
+	tests := []struct{
+
+		input string
+		expected string
+
+	}{
+
+		{
+			"a + b",
+			"(a + b)",
+	},
+		/*	{"a + b", "(a + b)"},
+	{"a + b  - c ", "(a + b) - c"},
+	{"a + b * d", "a + (b * d)"},
+	{"a + b", "(a + b)"},*/
+		
+	}
+	
+for _,tt := range tests{
+		
+	l := lexer.New(tt.input)
+	p := New(l)
+	
+	program := p.ParserProgram()
+	
+	checkParserErrors(t,p)	
+
+	actual := program.String()
+
+	if actual != tt.expected{
+		
+		t.Errorf("Expected= %q instead we got %q", tt.expected, actual)
+
+	}
+
+
+}
+
+
+}
 
 

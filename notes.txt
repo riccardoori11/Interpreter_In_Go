@@ -71,3 +71,7 @@ if you think about it a json parser and a parser for a programming langiuage is 
 
 We use t.Fatalf whenever we want to show that it is a fatal error and stop any further reading of the program. 
 t.Errorf is used when we want to allow the current program to run and to pick up on other independant failures0
+
+
+pratt parsing works by parsing the expression and then looking if we are facing an expression or a 
+literal depending on the order of the precedence.
