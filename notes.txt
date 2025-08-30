@@ -75,3 +75,5 @@ t.Errorf is used when we want to allow the current program to run and to pick up
 
 pratt parsing works by parsing the expression and then looking if we are facing an expression or a 
 literal depending on the order of the precedence.
+
+%T gives us the type of a given value

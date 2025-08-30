@@ -129,6 +129,8 @@ func (l *Lexer)NextToken() token.Token{
 				tok = NewToken(token.ASSIGN, l.ch)
 			case '+':
 				tok = NewToken(token.PLUS, l.ch)
+			case '*':
+				tok = NewToken(token.ASTERIK, l.ch)
 			case '-':
 				tok = NewToken(token.MINUS, l.ch)
 			case ')':

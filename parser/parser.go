@@ -89,6 +89,12 @@ func (p *Parser)parsePrefixExpression() ast.Expression{
 
 }
 
+func (p *Parser) parseBoolean() ast.Expression{
+	
+	return &ast.Boolean{Token: p.currToken,Value: p.currTokenIs(token.TRUE)}
+
+}
+
 
 func New(l *lexer.Lexer) *Parser{
 
@@ -99,7 +105,9 @@ func New(l *lexer.Lexer) *Parser{
 	}
 		
 	
-
+		
+		p.registerPrefix(token.TRUE,p.parseBoolean)
+p.registerPrefix(token.FALSE,p.parseBoolean)
 		p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 		p.registerPrefix(token.SLASH, p.parsePrefixExpression)	
 		p.registerPrefix(token.MINUS, p.parsePrefixExpression)
@@ -116,6 +124,7 @@ p.registerInfix(token.ASSIGN, p.parseInfixExpression)
 p.registerInfix(token.NEQ, p.parseInfixExpression)
 p.registerInfix(token.LTHAN, p.parseInfixExpression)
 p.registerInfix(token.GTHAN, p.parseInfixExpression)
+
 
 
 		p.nextToken()

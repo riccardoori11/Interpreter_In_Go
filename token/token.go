@@ -48,6 +48,11 @@ const(
 	LTHAN = "LThan"
 	NEQ = "NOT_Equal"
 
+	
+	// BOOL
+	
+
+
 	// If else
 	IF = "IF" 
 	ELSE = "ELSE"

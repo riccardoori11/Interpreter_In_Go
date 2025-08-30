@@ -14,7 +14,6 @@ import (
 
 
 
-
 func testLetStatement(t *testing.T, s ast.Statement, name string)bool{
 
 
@@ -411,13 +410,13 @@ func TestOperatorPrecedence(t *testing.T){
 	}{
 
 		{
-			"a + b",
-			"(a + b)",
+			"a * b",
+			"(a * b)",
 	},
-		/*	{"a + b", "(a + b)"},
-	{"a + b  - c ", "(a + b) - c"},
-	{"a + b * d", "a + (b * d)"},
-	{"a + b", "(a + b)"},*/
+		{"a + b", "(a + b)"},
+	{"a + b  - c ", "((a + b) - c)"},
+	{"a + b * d", "(a + (b * d))"},
+	{"a + b * d nOT= 555", "((a + (b * d)) nOT= 555)"},
 		
 	}
 	
@@ -442,6 +441,97 @@ for _,tt := range tests{
 }
 
 
+}
+
+func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
+	
+	ident, ok := exp.(*ast.Identifier)
+	if !ok{
+
+		t.Errorf("ident is not a ast.Identifier, instead %T", exp)
+		
+		return false
+	}
+	
+	if ident.Value !=  value{
+
+		
+		t.Errorf("wrong value mate, expected %s got %s", value, ident.Value)
+
+		return false
+	}
+	
+	if ident.TokenLiteral() != value{
+		
+		t.Errorf("expected %s got %s", value, ident.TokenLiteral())
+
+		return false
+
+	}
+	
+
+	return true
+}
+
+func testLiteralExpression(t *testing.T, exp ast.Expression, expected interface{})bool{
+
+	
+	switch v:= expected.(type){
+	
+case int:
+	return testIntegerLiteral(t,exp,int64(v))
+	
+case int64:
+	return testIntegerLiteral(t,exp,v)
+
+case string:
+	return  testIdentifier(t,exp,v)
+
+
+
+}
+t.Errorf("the type of exp was not handled, instead we got %T", exp)
+
+
+return false
+}
+
+func testInfixExpression(t *testing.T, exp ast.Expression, left interface{}, operator string, right interface{})bool{
+
+
+	opExp, ok := exp.(*ast.InfixExpression)
+
+	if !ok{
+
+		
+		t.Errorf("It is not an OperatorExpression. Instead we got %T(%s) ", exp, exp)
+		
+		return false
+
+	}
+
+	if !testLiteralExpression(t,opExp.Left, left ){
+		
+
+		
+		return false
+
+	}
+	
+	if opExp.Operator != operator{
+		
+		t.Errorf("exp.Operator is not %s, instead we got %q ", operator, opExp.Operator)
+		return false
+
+	}
+	
+	if !testLiteralExpression(t,opExp.Right, right){
+
+		
+		return false
+	}
+
+	return true
 }
 
 

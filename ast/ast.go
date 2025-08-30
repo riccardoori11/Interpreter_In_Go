@@ -24,6 +24,14 @@ type Statement interface{
 
 }
 
+type Boolean struct{
+
+	Token 	token.Token 
+	Value bool
+
+
+}
+
 type Expression interface{
 
 	Node
@@ -230,4 +238,11 @@ out.WriteString(ie.Right.String())
 out.WriteString(")")
 return out.String()
 }
+
+
+func (b *Boolean) expressionNode(){}
+
+func (b *Boolean) TokenLiteral() string{return b.Token.Literal}
+
+func (b *Boolean)String()string{ return b.Token.Literal}
 
